@@ -1,6 +1,6 @@
 package com.artillexstudios.axmines.mines.setter
 
-import com.artillexstudios.axapi.nms.NMSHandlers
+import com.artillexstudios.axapi.nms.wrapper.WrapperRegistry
 import com.artillexstudios.axapi.selection.Cuboid
 import dev.lone.itemsadder.api.CustomBlock
 import dev.lone.itemsadder.api.CustomFurniture
@@ -13,8 +13,9 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
 
-class ItemsAdderFastBlockSetter(world: World, distribution: EnumeratedDistribution<String>) : BlockSetter(world, distribution) {
-    private val setter = NMSHandlers.getNmsHandler().newSetter(world)
+class ItemsAdderFastBlockSetter(world: World, distribution: EnumeratedDistribution<String>) :
+    BlockSetter(world, distribution) {
+    private val setter = WrapperRegistry.WORLD.map(world).setter()
 
     override fun fill(cuboid: Cuboid, consumer: IntConsumer) {
         var blockCount = 0
@@ -45,10 +46,19 @@ class ItemsAdderFastBlockSetter(world: World, distribution: EnumeratedDistributi
                                 if (CustomBlock.isInRegistry(block)) {
                                     CustomBlock.place(block, Location(world, x.toDouble(), y.toDouble(), z.toDouble()))
                                 } else if (CustomFurniture.isInRegistry(block)) {
-                                    CustomFurniture.spawn(block, Location(world, x.toDouble(), y.toDouble(), z.toDouble()).block)
+                                    CustomFurniture.spawn(
+                                        block,
+                                        Location(world, x.toDouble(), y.toDouble(), z.toDouble()).block
+                                    )
                                 }
                             } else {
-                                setter.setBlock(x, y, z, Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData() ?: continue)
+                                setter.setBlock(
+                                    x,
+                                    y,
+                                    z,
+                                    Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData()
+                                        ?: continue
+                                )
                             }
                         }
                     }

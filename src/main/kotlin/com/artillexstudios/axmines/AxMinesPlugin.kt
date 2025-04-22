@@ -1,9 +1,13 @@
 package com.artillexstudios.axmines
 
 import com.artillexstudios.axapi.AxPlugin
-import com.artillexstudios.axapi.libs.libby.BukkitLibraryManager
-import com.artillexstudios.axapi.libs.libby.Library
-import com.artillexstudios.axapi.utils.FeatureFlags
+import com.artillexstudios.axapi.dependencies.DependencyManagerWrapper
+import com.artillexstudios.axapi.metrics.AxMetrics
+import com.artillexstudios.axapi.updatechecker.UpdateCheck
+import com.artillexstudios.axapi.updatechecker.UpdateCheckResult
+import com.artillexstudios.axapi.updatechecker.UpdateChecker
+import com.artillexstudios.axapi.updatechecker.sources.ModrinthUpdateCheckSource
+import com.artillexstudios.axapi.utils.StringUtils
 import com.artillexstudios.axapi.utils.Version
 import com.artillexstudios.axmines.commands.AxMinesCommand
 import com.artillexstudios.axmines.config.impl.Config
@@ -13,18 +17,20 @@ import com.artillexstudios.axmines.listener.BlockListener
 import com.artillexstudios.axmines.mines.Mine
 import com.artillexstudios.axmines.mines.MineTicker
 import com.artillexstudios.axmines.mines.Mines
+import java.time.Duration
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
+import org.bukkit.command.CommandSender
 import revxrsal.commands.bukkit.BukkitCommandHandler
+import revxrsal.zapper.repository.MavenRepository
 
 class AxMinesPlugin : AxPlugin() {
+    private val metrics = AxMetrics(this, 4)
+
     companion object {
         lateinit var INSTANCE: AxMinesPlugin
         lateinit var MESSAGES: Messages
-    }
-
-    override fun updateFlags() {
-        FeatureFlags.PACKET_ENTITY_TRACKER_ENABLED.set(true)
     }
 
     override fun enable() {
@@ -36,14 +42,6 @@ class AxMinesPlugin : AxPlugin() {
 
         Metrics(this, 20058)
 
-        val libraryLoader = BukkitLibraryManager(this)
-        libraryLoader.addMavenCentral()
-        libraryLoader.addJitPack()
-        libraryLoader.loadLibrary(Library.builder().groupId("org.slf4j").artifactId("slf4j-api").version("2.0.9").build())
-        libraryLoader.loadLibrary(Library.builder().groupId("org.apache.commons").artifactId("commons-text").version("1.11.0").build())
-        libraryLoader.loadLibrary(Library.builder().groupId("org.apache.commons").artifactId("commons-text").version("1.11.0").build())
-        libraryLoader.loadLibrary(Library.builder().groupId("commons-io").artifactId("commons-io").version("2.15.0").build())
-        libraryLoader.loadLibrary(Library.builder().groupId("org.jetbrains.kotlin").artifactId("kotlin-stdlib").version("1.9.21").build())
 
         INSTANCE = this
 
@@ -70,8 +68,67 @@ class AxMinesPlugin : AxPlugin() {
             PlaceholderAPIIntegration().register()
         }
 
+        if (Config.UPDATE_CHECKER_ENABLED) {
+            val checker = UpdateChecker(ModrinthUpdateCheckSource("axmines"))
+                .timeBetweenChecks(Duration.ofMinutes(5))
+                .register("axmines.updatecheck.onjoin") { Config.UPDATE_CHECKER_MESSAGE_ON_JOIN }
+                .onCheck { sender: CommandSender?, result: UpdateCheck? ->
+                    if (result!!.result() == UpdateCheckResult.UPDATE_AVAILABLE) {
+                        for (string in MESSAGES.UPDATE_CHECK) {
+                            if (string.contains("<changelog>")) {
+                                for (changelog in result.changelog()) {
+                                    sender!!.sendMessage(
+                                        StringUtils.formatToString(
+                                            MESSAGES.CHANGELOG_VERSION,
+                                            Placeholder.unparsed("version", changelog.version().string())
+                                        )
+                                    )
+                                    for (s in changelog.changelog().split("\n".toRegex()).dropLastWhile { it.isEmpty() }
+                                        .toTypedArray()) {
+                                        sender.sendMessage(
+                                            StringUtils.formatToString(
+                                                MESSAGES.CHANGELOG,
+                                                Placeholder.unparsed("changelog-entry", s)
+                                            )
+                                        )
+                                    }
+                                }
+                            } else {
+                                sender!!.sendMessage(
+                                    StringUtils.formatToString(
+                                        MESSAGES.PREFIX + string,
+                                        Placeholder.parsed("version", result.version().string()),
+                                        Placeholder.parsed("current", this.description.version)
+                                    )
+                                )
+                            }
+                        }
+                    } else if (result.result() == UpdateCheckResult.FAILED) {
+                        sender!!.sendMessage(StringUtils.formatToString(MESSAGES.PREFIX + "<#FF0000>Failed to check for updates! Check the console for more information!"))
+                        result.exception().printStackTrace()
+                    }
+                }
+                .check(Bukkit.getConsoleSender())
+        }
+
+        this.metrics.start()
         MineTicker.schedule()
         reload()
+    }
+
+    override fun disable() {
+        this.metrics.cancel()
+    }
+
+    override fun dependencies(manager: DependencyManagerWrapper) {
+        manager.let {
+            it.repository(MavenRepository.jitpack())
+            it.repository(MavenRepository.mavenCentral())
+            it.dependency("org.slf4j:slf4j-api:2.0.9")
+            it.dependency("org.apache.commons:commons-text:1.11.0")
+            it.dependency("commons-io:commons-io:2.15.0")
+            it.dependency("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
+        }
     }
 
     override fun reload() {

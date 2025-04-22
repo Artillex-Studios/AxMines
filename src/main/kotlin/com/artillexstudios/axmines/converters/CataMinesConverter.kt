@@ -1,6 +1,6 @@
 package com.artillexstudios.axmines.converters
 
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.YamlDocument
+import com.artillexstudios.axapi.libs.boostedyaml.YamlDocument
 import com.artillexstudios.axapi.serializers.Serializers
 import com.artillexstudios.axmines.AxMinesPlugin
 import com.artillexstudios.axmines.mines.Mine

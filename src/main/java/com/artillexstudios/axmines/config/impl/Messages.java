@@ -61,6 +61,19 @@ public class Messages extends AbstractConfig {
     @Key("messages.set-teleport")
     public String SET_TELEPORT = "<color:#00FF00>You've set the teleport to your location!";
 
+    @Key("messages.updatecheck.message")
+    public List<String> UPDATE_CHECK = List.of(
+            "<#00FF00>A new version of the plugin is available! <white><click:open_url:'https://modrinth.com/plugin/axmines/version/<version>'><u>Download it on <#00FF00>Modrinth!</u></click>",
+            "<gray>Changelog:",
+            "<changelog>"
+    );
+
+    @Key("messages.updatecheck.changelog-version")
+    public String CHANGELOG_VERSION = "<white><version>:";
+
+    @Key("messages.updatecheck.changelog")
+    public String CHANGELOG = "<white><changelog-entry>";
+
     protected final String fileName;
 
     public Messages(String fileName) {

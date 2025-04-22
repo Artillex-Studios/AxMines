@@ -52,8 +52,8 @@ public class MineConfig extends Messages {
     public int TIMER_FORMAT = 2;
 
     @Key("setter")
-    @Comment({"What blocksetter should we use to set the blocks?", "Options:", "parallel - Best performance, does not lag the server thread. Sometimes can be a little bit inaccurate", "fast - Sets the blocks on the main thread using faster methods", "bukkit - Uses the Bukkit API to set the blocks. This is the slowest out of all the setters", "", "If you are having issues with blocks not being set correctly, we suggest using bukkit."})
-    public String SETTER = "parallel";
+    @Comment({"What blocksetter should we use to set the blocks?", "Options:", "parallel - Best performance, does not lag the server thread. Sometimes can be a little bit inaccurate - CURRENTLY NOT AVAILABLE", "fast - Sets the blocks on the main thread using faster methods", "bukkit - Uses the Bukkit API to set the blocks. This is the slowest out of all the setters", "", "If you are having issues with blocks not being set correctly, we suggest using bukkit."})
+    public String SETTER = "fast";
 
     public MineConfig(String fileName) {
         super(fileName);

@@ -8,8 +8,20 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 
 class BlockListener : Listener {
+
+    @EventHandler
+    fun onPlayerJoinEvent(event: PlayerJoinEvent) {
+        Mines.getTypes().forEach { (_, mine) ->
+            if (mine.cuboid.contains(event.player.location)) {
+                event.player.teleport(
+                    mine.cuboid.world.getHighestBlockAt(event.player.location).location.add(0.0, 1.0, 0.0)
+                )
+            }
+        }
+    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun onBlockBreakEvent(event: BlockBreakEvent) {

@@ -1,6 +1,6 @@
 package com.artillexstudios.axmines.commands
 
-import com.artillexstudios.axapi.libs.boostedyaml.boostedyaml.YamlDocument
+import com.artillexstudios.axapi.libs.boostedyaml.YamlDocument
 import com.artillexstudios.axapi.serializers.Serializers
 import com.artillexstudios.axapi.utils.PaperUtils
 import com.artillexstudios.axapi.utils.StringUtils
@@ -130,7 +130,7 @@ class AxMinesCommand {
         val config = YamlDocument.create(file)
         config.set("selection.1", Serializers.LOCATION.serialize(selection.position1))
         config.set("selection.2", Serializers.LOCATION.serialize(selection.position2))
-        config.set("display-name", "<color:#FF0000>$name</#FF0000>")
+        config.set("display-name", "<#FF0000>$name</#FF0000>")
         config.save()
         val createdMine = Mine(file, false)
         val maxY = createdMine.cuboid.maxY

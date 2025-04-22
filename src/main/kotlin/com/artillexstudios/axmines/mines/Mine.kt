@@ -3,6 +3,7 @@ package com.artillexstudios.axmines.mines
 import com.artillexstudios.axapi.scheduler.Scheduler
 import com.artillexstudios.axapi.selection.Cuboid
 import com.artillexstudios.axapi.serializers.Serializers
+import com.artillexstudios.axapi.utils.ActionBar
 import com.artillexstudios.axapi.utils.ItemBuilder
 import com.artillexstudios.axapi.utils.StringUtils
 import com.artillexstudios.axmines.config.impl.Config
@@ -14,7 +15,6 @@ import com.artillexstudios.axmines.mines.setter.ItemsAdderBukkitBlockSetter
 import com.artillexstudios.axmines.mines.setter.ItemsAdderFastBlockSetter
 import com.artillexstudios.axmines.mines.setter.OraxenBukkitBlockSetter
 import com.artillexstudios.axmines.mines.setter.OraxenFastBlockSetter
-import com.artillexstudios.axmines.mines.setter.ParallelBlockSetter
 import com.artillexstudios.axmines.utils.TimeUtils
 import java.io.File
 import java.util.Locale
@@ -75,7 +75,7 @@ class Mine(val file: File, reset: Boolean = true) {
 
         if (config.ACTION_BAR_ENABLED && actionBarTick >= 10) {
             actionBarTick = 0
-            val formatted = StringUtils.formatToString(
+            val formatted = StringUtils.format(
                 config.ACTION_BAR,
                 Placeholder.parsed("notbroken", blocks.toString()),
                 Placeholder.parsed("total", volume.toString()),
@@ -83,8 +83,7 @@ class Mine(val file: File, reset: Boolean = true) {
                 Placeholder.parsed("blocksbroken", String.format("%.2f", (volume - blocks))),
                 Placeholder.parsed("time", TimeUtils.format((config.RESET_TICKS - tick) / 20 * 1000, this))
             )
-
-            val component = TextComponent.fromLegacyText(formatted)
+            val bar = ActionBar(formatted)
 
             val x1 = cuboid.maxX.toDouble()
             val y1 = cuboid.maxY.toDouble()
@@ -112,7 +111,7 @@ class Mine(val file: File, reset: Boolean = true) {
                 }
 
                 if (distance <= config.ACTION_BAR_RANGE * config.ACTION_BAR_RANGE) {
-                    it.spigot().sendMessage(ChatMessageType.ACTION_BAR, *component)
+                    bar.send(it)
                 }
             }
         }
@@ -234,7 +233,7 @@ class Mine(val file: File, reset: Boolean = true) {
                         cuboid.world.players.forEach {
                             if (cuboid.contains(it.location)) {
                                 it.teleport(
-                                    cuboid.world.getHighestBlockAt(it.location).getLocation().add(0.0, 1.0, 0.0)
+                                    cuboid.world.getHighestBlockAt(it.location).location.add(0.0, 1.0, 0.0)
                                 )
                             }
                         }
@@ -391,8 +390,7 @@ class Mine(val file: File, reset: Boolean = true) {
             val distribution = EnumeratedDistribution(list)
 
             placer = when (config.SETTER.lowercase(Locale.ENGLISH)) {
-                "parallel" -> ItemsAdderFastBlockSetter(cuboid.world, distribution)
-                "fast" -> ItemsAdderFastBlockSetter(cuboid.world, distribution)
+                "parallel", "fast" -> ItemsAdderFastBlockSetter(cuboid.world, distribution)
                 else -> ItemsAdderBukkitBlockSetter(cuboid.world, distribution)
             }
         } else {
@@ -416,8 +414,7 @@ class Mine(val file: File, reset: Boolean = true) {
             val distribution = EnumeratedDistribution(list)
 
             placer = when (config.SETTER.lowercase(Locale.ENGLISH)) {
-                "parallel" -> ParallelBlockSetter(cuboid.world, distribution)
-                "fast" -> FastBlockSetter(cuboid.world, distribution)
+                "parallel", "fast" -> FastBlockSetter(cuboid.world, distribution)
                 else -> BukkitBlockSetter(cuboid.world, distribution)
             }
         }

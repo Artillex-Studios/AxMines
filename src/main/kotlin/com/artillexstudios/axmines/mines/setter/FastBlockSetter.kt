@@ -1,6 +1,6 @@
 package com.artillexstudios.axmines.mines.setter
 
-import com.artillexstudios.axapi.nms.NMSHandlers
+import com.artillexstudios.axapi.nms.wrapper.WrapperRegistry
 import com.artillexstudios.axapi.selection.Cuboid
 import java.util.function.IntConsumer
 import kotlin.math.max
@@ -9,8 +9,9 @@ import org.apache.commons.math3.distribution.EnumeratedDistribution
 import org.bukkit.World
 import org.bukkit.block.data.BlockData
 
-class FastBlockSetter(world: World, distribution: EnumeratedDistribution<BlockData>) : BlockSetter(world, distribution) {
-    private val setter = NMSHandlers.getNmsHandler().newSetter(world)
+class FastBlockSetter(world: World, distribution: EnumeratedDistribution<BlockData>) :
+    BlockSetter(world, distribution) {
+    private val setter = WrapperRegistry.WORLD.map(world).setter()
 
     override fun fill(cuboid: Cuboid, consumer: IntConsumer) {
         var blockCount = 0

@@ -1,6 +1,6 @@
 package com.artillexstudios.axmines.mines.setter
 
-import com.artillexstudios.axapi.nms.NMSHandlers
+import com.artillexstudios.axapi.nms.wrapper.WrapperRegistry
 import com.artillexstudios.axapi.selection.Cuboid
 import io.th0rgal.oraxen.api.OraxenBlocks
 import java.util.Locale
@@ -12,8 +12,9 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
 
-class OraxenFastBlockSetter(world: World, distribution: EnumeratedDistribution<String>) : BlockSetter(world, distribution) {
-    private val setter = NMSHandlers.getNmsHandler().newSetter(world)
+class OraxenFastBlockSetter(world: World, distribution: EnumeratedDistribution<String>) :
+    BlockSetter(world, distribution) {
+    private val setter = WrapperRegistry.WORLD.map(world).setter()
 
     override fun fill(cuboid: Cuboid, consumer: IntConsumer) {
         var blockCount = 0
@@ -40,9 +41,18 @@ class OraxenFastBlockSetter(world: World, distribution: EnumeratedDistribution<S
                             ++blockCount
                             val sample = distribution.sample() as String
                             if (sample.contains("oraxen:")) {
-                                OraxenBlocks.place(sample.substring("oraxen:".length), Location(world, x.toDouble(), y.toDouble(), z.toDouble()))
+                                OraxenBlocks.place(
+                                    sample.substring("oraxen:".length),
+                                    Location(world, x.toDouble(), y.toDouble(), z.toDouble())
+                                )
                             } else {
-                                setter.setBlock(x, y, z, Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData() ?: continue)
+                                setter.setBlock(
+                                    x,
+                                    y,
+                                    z,
+                                    Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData()
+                                        ?: continue
+                                )
                             }
                         }
                     }
