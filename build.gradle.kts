@@ -33,6 +33,18 @@ dependencies {
 }
 
 tasks {
+    compileKotlin {
+        kotlinOptions {
+            javaParameters = true
+        }
+
+        compilerOptions {
+            freeCompilerArgs.add("-Xno-param-assertions")
+            freeCompilerArgs.add("-Xno-call-assertions")
+            freeCompilerArgs.add("-Xno-receiver-assertions")
+        }
+    }
+
     compileJava {
         options.encoding = Charsets.UTF_8.name()
     }

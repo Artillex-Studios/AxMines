@@ -121,14 +121,12 @@ class AxMinesPlugin : AxPlugin() {
     }
 
     override fun dependencies(manager: DependencyManagerWrapper) {
-        manager.let {
-            it.repository(MavenRepository.jitpack())
-            it.repository(MavenRepository.mavenCentral())
-            it.dependency("org.slf4j:slf4j-api:2.0.9")
-            it.dependency("org.apache.commons:commons-text:1.11.0")
-            it.dependency("commons-io:commons-io:2.15.0")
-            it.dependency("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
-        }
+        manager.repository(MavenRepository.jitpack())
+        manager.repository(MavenRepository.mavenCentral())
+        manager.dependency("org.slf4j:slf4j-api:2.0.9")
+        manager.dependency("org.apache.commons:commons-text:1.11.0")
+        manager.dependency("commons-io:commons-io:2.15.0")
+        manager.dependency("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
     }
 
     override fun reload() {
