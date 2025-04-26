@@ -1,5 +1,6 @@
 package com.artillexstudios.axmines.listener
 
+import com.artillexstudios.axapi.serializers.Serializers
 import com.artillexstudios.axmines.mines.Mines
 import com.artillexstudios.axmines.selection.SelectionWand
 import org.bukkit.event.EventHandler
@@ -16,9 +17,19 @@ class BlockListener : Listener {
     fun onPlayerJoinEvent(event: PlayerJoinEvent) {
         Mines.getTypes().forEach { (_, mine) ->
             if (mine.cuboid.contains(event.player.location)) {
-                event.player.teleport(
-                    mine.cuboid.world.getHighestBlockAt(event.player.location).location.add(0.0, 1.0, 0.0)
-                )
+                when (mine.config.TELEPORT_ON_RESET) {
+                    0 -> {
+                        event.player.teleport(
+                            mine.cuboid.world.getHighestBlockAt(event.player.location).location.add(0.0, 1.0, 0.0)
+                        )
+                    }
+
+                    1 -> {
+                        event.player.teleport(Serializers.LOCATION.deserialize(mine.config.TELEPORT_LOCATION))
+                    }
+
+                    else -> {}
+                }
             }
         }
     }

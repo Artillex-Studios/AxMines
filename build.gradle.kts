@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.artillexstudios.axapi:axapi:1.4.658:all")
+    implementation("com.artillexstudios.axapi:axapi:1.4.672:all")
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("dev.triumphteam:triumph-gui:3.1.7")
     compileOnly("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
