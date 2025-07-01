@@ -52,6 +52,16 @@ class ItemsAdderFastBlockSetter(world: World, distribution: EnumeratedDistributi
                                     )
                                 }
                             } else {
+                                if (!CustomBlock.remove(Location(world, x.toDouble(), y.toDouble(), z.toDouble()))) {
+                                    CustomFurniture.byAlreadySpawned(
+                                        Location(
+                                            world,
+                                            x.toDouble(),
+                                            y.toDouble(),
+                                            z.toDouble()
+                                        ).block
+                                    )?.remove(false)
+                                }
                                 setter.setBlock(
                                     x,
                                     y,

@@ -12,7 +12,8 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
 
-class ItemsAdderBukkitBlockSetter(world: World, distribution: EnumeratedDistribution<String>) : BlockSetter(world, distribution) {
+class ItemsAdderBukkitBlockSetter(world: World, distribution: EnumeratedDistribution<String>) :
+    BlockSetter(world, distribution) {
 
     override fun fill(cuboid: Cuboid, consumer: IntConsumer) {
         var blockCount = 0
@@ -43,10 +44,30 @@ class ItemsAdderBukkitBlockSetter(world: World, distribution: EnumeratedDistribu
                                 if (CustomBlock.isInRegistry(block)) {
                                     CustomBlock.place(block, Location(world, x.toDouble(), y.toDouble(), z.toDouble()))
                                 } else if (CustomFurniture.isInRegistry(block)) {
-                                    CustomFurniture.spawn(block, Location(world, x.toDouble(), y.toDouble(), z.toDouble()).block)
+                                    CustomFurniture.spawn(
+                                        block,
+                                        Location(world, x.toDouble(), y.toDouble(), z.toDouble()).block
+                                    )
                                 }
                             } else {
-                                world.setBlockData(x, y, z, Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData() ?: continue)
+                                if (!CustomBlock.remove(Location(world, x.toDouble(), y.toDouble(), z.toDouble()))) {
+                                    CustomFurniture.byAlreadySpawned(
+                                        Location(
+                                            world,
+                                            x.toDouble(),
+                                            y.toDouble(),
+                                            z.toDouble()
+                                        ).block
+                                    )?.remove(false)
+                                }
+
+                                world.setBlockData(
+                                    x,
+                                    y,
+                                    z,
+                                    Material.matchMaterial(sample.uppercase(Locale.ENGLISH))?.createBlockData()
+                                        ?: continue
+                                )
                             }
                         }
                     }

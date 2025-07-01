@@ -46,6 +46,7 @@ class OraxenFastBlockSetter(world: World, distribution: EnumeratedDistribution<S
                                     Location(world, x.toDouble(), y.toDouble(), z.toDouble())
                                 )
                             } else {
+                                OraxenBlocks.remove(Location(world, x.toDouble(), y.toDouble(), z.toDouble()), null)
                                 setter.setBlock(
                                     x,
                                     y,
