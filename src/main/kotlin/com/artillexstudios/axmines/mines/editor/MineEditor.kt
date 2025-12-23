@@ -29,11 +29,11 @@ class MineEditor(val mine: Mine, val player: Player) {
 
         GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-        gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
+        gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
             MinesEditor(player).open()
         })
 
-        val displayName = ItemBuilder(ItemStack(Material.NAME_TAG))
+        val displayName = ItemBuilder.create(ItemStack(Material.NAME_TAG))
             .setName("<color:#00AAFF><bold>Display name")
             .setLore(
                 listOf("", "<gray>> <color:#00AAFF>Current name: <white><name>", "", "<color:#00AAFF>Click to edit!"),
@@ -41,12 +41,12 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val contents = ItemBuilder(ItemStack(Material.EMERALD_BLOCK))
+        val contents = ItemBuilder.create(ItemStack(Material.EMERALD_BLOCK))
             .setName("<color:#00AAFF><bold>Contents")
             .setLore(listOf("", "<color:#00AAFF>Click to edit!"))
             .get()
 
-        val teleportOnReset = ItemBuilder(ItemStack(Material.ENDER_PEARL))
+        val teleportOnReset = ItemBuilder.create(ItemStack(Material.ENDER_PEARL))
             .setName("<color:#00AAFF><bold>Teleport on reset")
             .setLore(
                 listOf(
@@ -63,7 +63,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val actionBarEnabled = ItemBuilder(ItemStack(Material.STONE_BUTTON))
+        val actionBarEnabled = ItemBuilder.create(ItemStack(Material.STONE_BUTTON))
             .setName("<color:#00AAFF><bold>Action bar enabled")
             .setLore(
                 listOf(
@@ -75,7 +75,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val actionBarRange = ItemBuilder(ItemStack(Material.LEAD))
+        val actionBarRange = ItemBuilder.create(ItemStack(Material.LEAD))
             .setName("<color:#00AAFF><bold>Action bar range")
             .setLore(
                 listOf(
@@ -88,7 +88,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val broadcastReset = ItemBuilder(ItemStack(Material.OAK_BUTTON))
+        val broadcastReset = ItemBuilder.create(ItemStack(Material.OAK_BUTTON))
             .setName("<color:#00AAFF><bold>Broadcast reset")
             .setLore(
                 listOf(
@@ -107,7 +107,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val resetTicks = ItemBuilder(ItemStack(Material.CHEST))
+        val resetTicks = ItemBuilder.create(ItemStack(Material.CHEST))
             .setName("<color:#00AAFF><bold>Reset ticks")
             .setLore(
                 listOf(
@@ -122,7 +122,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val resetPercent = ItemBuilder(ItemStack(Material.ANVIL))
+        val resetPercent = ItemBuilder.create(ItemStack(Material.ANVIL))
             .setName("<color:#00AAFF><bold>Reset percent")
             .setLore(
                 listOf(
@@ -135,7 +135,7 @@ class MineEditor(val mine: Mine, val player: Player) {
             )
             .get()
 
-        val rewards = ItemBuilder(ItemStack(Material.CHEST))
+        val rewards = ItemBuilder.create(ItemStack(Material.CHEST))
             .setName("<color:#00AAFF><bold>Rewards")
             .setLore(
                 listOf(

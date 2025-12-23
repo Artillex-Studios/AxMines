@@ -334,7 +334,7 @@ class Mine(val file: File, reset: Boolean = true) {
                 (it["items"] ?: listOf<HashMap<Any, Any>>()) as? List<HashMap<Any, Any>> ?: return@forEach
             val itemStacks = mutableListOf<ItemStack>()
             items.forEach { map ->
-                itemStacks.add(ItemBuilder(map).get())
+                itemStacks.add(ItemBuilder.create(map).get())
             }
 
             val commands: List<String> = (it["commands"] ?: listOf<String>()) as? List<String> ?: return@forEach

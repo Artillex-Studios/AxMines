@@ -22,16 +22,16 @@ class MinesEditor(private val player: Player) {
 
         GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-        gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
+        gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
             gui.previous()
         })
 
-        gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
+        gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
             gui.next()
         })
 
         Mines.getTypes().forEach { (_, mine) ->
-            val item = ItemBuilder(
+            val item = ItemBuilder.create(
                 mapOf(
                     Pair("material", "golden_pickaxe"),
                     Pair("name", mine.config.DISPLAY_NAME),

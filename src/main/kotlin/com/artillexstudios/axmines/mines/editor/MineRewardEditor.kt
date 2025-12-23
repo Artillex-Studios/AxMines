@@ -29,12 +29,12 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
 
         GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-        gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<gray>Go back").get()) {
+        gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<gray>Go back").get()) {
             MineRewardsEditor(mine, player).open()
         })
 
         gui.addItem(GuiItem(
-            ItemBuilder(Material.GOLD_BLOCK).setName("<color:#00AAFF>Chance").setLore(
+            ItemBuilder.create(Material.GOLD_BLOCK).setName("<color:#00AAFF>Chance").setLore(
                 listOf(
                     "",
                     "<gray>> <color:#00AAFF>Current chance: <white><chance>",
@@ -69,7 +69,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
         })
 
         gui.addItem(GuiItem(
-            ItemBuilder(Material.ANVIL).setName("<color:#00AAFF>Commands").setLore(
+            ItemBuilder.create(Material.ANVIL).setName("<color:#00AAFF>Commands").setLore(
                 listOf(
                     "",
                     "<gray>> The commands that are ran when this reward is given.",
@@ -82,7 +82,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
         })
 
         gui.addItem(GuiItem(
-            ItemBuilder(Material.IRON_HOE).setName("<color:#00AAFF>Items").setLore(
+            ItemBuilder.create(Material.IRON_HOE).setName("<color:#00AAFF>Items").setLore(
                 listOf(
                     "",
                     "<gray>> The items that are given when this reward is given.",
@@ -95,7 +95,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
         })
 
         gui.addItem(GuiItem(
-            ItemBuilder(Material.STONE).setName("<color:#00AAFF>Blocks").setLore(
+            ItemBuilder.create(Material.STONE).setName("<color:#00AAFF>Blocks").setLore(
                 listOf(
                     "",
                     "<gray>> The blocks that this reward triggers on.",
@@ -123,15 +123,15 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
 
             GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-            gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
+            gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
                 MineRewardEditor(mine, player, map).open()
             })
 
-            gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
+            gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
                 gui.previous()
             })
 
-            gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
+            gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
                 gui.next()
             })
 
@@ -139,7 +139,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
             (map["commands"] as? MutableList<String>)?.forEach {
                 gui.addItem(
                     GuiItem(
-                        ItemBuilder(Material.PAPER).setName(it).setLore(listOf("", "<color:#FF0000>Drop to remove!")).get()
+                        ItemBuilder.create(Material.PAPER).setName(it).setLore(listOf("", "<color:#FF0000>Drop to remove!")).get()
                     ) { event ->
                         if (event.click == ClickType.DROP) {
                             mine.config.RANDOM_REWARDS.remove(map)
@@ -158,7 +158,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
                     })
             }
 
-            gui.setItem(40, GuiItem(ItemBuilder(Material.PAPER).setName("<gray>Add new command").get()) { event ->
+            gui.setItem(40, GuiItem(ItemBuilder.create(Material.PAPER).setName("<gray>Add new command").get()) { event ->
                 val commands = map.getOrDefault("commands", ArrayList<String>()) as MutableList<String>
 
                 event.whoClicked.closeInventory()
@@ -205,20 +205,20 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
 
             GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-            gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
+            gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
                 MineRewardEditor(mine, player, map).open()
             })
 
-            gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
+            gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
                 gui.previous()
             })
 
-            gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
+            gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
                 gui.next()
             })
 
             (map["items"] as? MutableList<MutableMap<Any, Any>>)?.forEach {
-                gui.addItem(GuiItem(ItemBuilder(it).get()) { event ->
+                gui.addItem(GuiItem(ItemBuilder.create(it).get()) { event ->
                     if (event.click == ClickType.DROP) {
                         mine.config.RANDOM_REWARDS.remove(map)
                         (map["items"] as MutableList<MutableMap<Any, Any>>).remove(it)
@@ -240,7 +240,7 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
                 mine.config.RANDOM_REWARDS.remove(map)
                 val items =
                     map.getOrDefault("items", ArrayList<MutableMap<Any, Any>>()) as ArrayList<MutableMap<Any, Any>>
-                items.add(ItemBuilder(event.currentItem ?: return@setPlayerInventoryAction).serialize(true))
+                items.add(ItemBuilder.create(event.currentItem ?: return@setPlayerInventoryAction).serialize(true))
                 
                 map["items"] = items
                 mine.config.RANDOM_REWARDS.add(map)
@@ -266,22 +266,22 @@ class MineRewardEditor(val mine: Mine, val player: Player, val map: MutableMap<S
 
             GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-            gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<gray>Go back").get()) {
+            gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<gray>Go back").get()) {
                 MineRewardEditor(mine, player, map).open()
             })
 
-            gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<gray>Previous page").get()) {
+            gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<gray>Previous page").get()) {
                 gui.previous()
             })
 
-            gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<gray>Next page").get()) {
+            gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<gray>Next page").get()) {
                 gui.next()
             })
 
             (map["blocks"] as? MutableList<String>)?.forEach {
                 gui.addItem(
                     GuiItem(
-                        ItemBuilder(
+                        ItemBuilder.create(
                             mapOf(
                                 Pair("material", it),
                                 Pair("lore", listOf("", "<color:#FF0000>Drop to remove!"))

@@ -25,15 +25,15 @@ class MineContentsEditor(val mine: Mine, val player: Player) {
 
         GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-        gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
+        gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
             MineEditor(mine, player).open()
         })
 
-        gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
+        gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
             gui.previous()
         })
 
-        gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
+        gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
             gui.next()
         })
 
@@ -44,7 +44,7 @@ class MineContentsEditor(val mine: Mine, val player: Player) {
         }
 
         mine.config.CONTENTS.forEach { (type, chance) ->
-            val item = ItemBuilder(
+            val item = ItemBuilder.create(
                 mapOf(
                     Pair("material", type), Pair(
                         "lore", listOf(

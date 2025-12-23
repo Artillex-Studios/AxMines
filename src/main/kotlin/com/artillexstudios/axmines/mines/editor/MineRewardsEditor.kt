@@ -24,19 +24,19 @@ class MineRewardsEditor(val mine: Mine, val player: Player) {
 
         GuiFiller(gui).fillBorder(GuiItem(ItemStack(Material.GRAY_STAINED_GLASS_PANE)))
 
-        gui.setItem(36, GuiItem(ItemBuilder(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
+        gui.setItem(36, GuiItem(ItemBuilder.create(Material.TIPPED_ARROW).setName("<color:#00AAFF>Go back").get()) {
             MineEditor(mine, player).open()
         })
 
-        gui.setItem(38, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
+        gui.setItem(38, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Previous page").get()) {
             gui.previous()
         })
 
-        gui.setItem(42, GuiItem(ItemBuilder(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
+        gui.setItem(42, GuiItem(ItemBuilder.create(Material.ARROW).setName("<color:#00AAFF>Next page").get()) {
             gui.next()
         })
 
-        gui.setItem(40, GuiItem(ItemBuilder(Material.PAPER).setName("<color:#00AAFF>Add new").get()) {
+        gui.setItem(40, GuiItem(ItemBuilder.create(Material.PAPER).setName("<color:#00AAFF>Add new").get()) {
             val map = mutableMapOf<String, Any>()
             map["chance"] = 10.0
             mine.config.RANDOM_REWARDS.add(map)
@@ -50,7 +50,7 @@ class MineRewardsEditor(val mine: Mine, val player: Player) {
         var index = 0
         mine.config.RANDOM_REWARDS.forEach { map ->
             index++
-            val item = ItemBuilder(Material.EMERALD_BLOCK)
+            val item = ItemBuilder.create(Material.EMERALD_BLOCK)
                 .setName("<color:#00AAFF><bold>Reward editor <id>", Placeholder.unparsed("id", index.toString()))
                 .setLore(listOf("", "<color:#00FF00>Click to edit", "<color:#FF0000>Drop to remove!"))
                 .get()
