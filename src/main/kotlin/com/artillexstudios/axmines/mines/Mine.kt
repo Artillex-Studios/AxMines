@@ -75,15 +75,7 @@ class Mine(val file: File, reset: Boolean = true) {
 
         if (config.ACTION_BAR_ENABLED && actionBarTick >= 10) {
             actionBarTick = 0
-            val formatted = StringUtils.format(
-                config.ACTION_BAR,
-                Placeholder.parsed("notbroken", blocks.toString()),
-                Placeholder.parsed("total", volume.toString()),
-                Placeholder.parsed("percent", String.format("%.2f", (blocks / volume * 100.0))),
-                Placeholder.parsed("blocksbroken", String.format("%.2f", (volume - blocks))),
-                Placeholder.parsed("time", TimeUtils.format((config.RESET_TICKS - tick) / 20 * 1000, this))
-            )
-            val bar = ActionBar(formatted)
+            val players = mutableListOf<Player>()
 
             val x1 = cuboid.maxX.toDouble()
             val y1 = cuboid.maxY.toDouble()
@@ -111,6 +103,21 @@ class Mine(val file: File, reset: Boolean = true) {
                 }
 
                 if (distance <= config.ACTION_BAR_RANGE * config.ACTION_BAR_RANGE) {
+                    players.add(it)
+                }
+            }
+
+            Scheduler.get().runAsync {
+                val formatted = StringUtils.format(
+                    config.ACTION_BAR,
+                    Placeholder.parsed("notbroken", blocks.toString()),
+                    Placeholder.parsed("total", volume.toString()),
+                    Placeholder.parsed("percent", String.format("%.2f", (blocks / volume * 100.0))),
+                    Placeholder.parsed("blocksbroken", String.format("%.2f", (volume - blocks))),
+                    Placeholder.parsed("time", TimeUtils.format((config.RESET_TICKS - tick) / 20 * 1000, this))
+                )
+                val bar = ActionBar(formatted)
+                players.forEach {
                     bar.send(it)
                 }
             }
