@@ -136,7 +136,7 @@ class Mine(val file: File, reset: Boolean = true) {
             LOGGER.info("A block was broken in mine $name! Current percentage of not broken blocks: $percent blocks: $blocks, volume: $volume")
         }
 
-        if (percent < config.RESET_PERCENT) {
+        if (percent >= 0 && percent < config.RESET_PERCENT) {
             reset()
         }
     }
