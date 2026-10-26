@@ -23,7 +23,6 @@ import org.bstats.bukkit.Metrics
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import revxrsal.commands.bukkit.BukkitCommandHandler
-import revxrsal.zapper.repository.MavenRepository
 
 class AxMinesPlugin : AxPlugin() {
     private val metrics = AxMetrics(this, 4)
@@ -121,8 +120,6 @@ class AxMinesPlugin : AxPlugin() {
     }
 
     override fun dependencies(manager: DependencyManagerWrapper) {
-        manager.repository(MavenRepository.jitpack())
-        manager.repository(MavenRepository.mavenCentral())
         manager.dependency("org.slf4j:slf4j-api:2.0.9")
         manager.dependency("org.apache.commons:commons-text:1.11.0")
         manager.dependency("commons-io:commons-io:2.15.0")
