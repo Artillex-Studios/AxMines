@@ -19,9 +19,7 @@ class BlockListener : Listener {
             if (mine.cuboid.contains(event.player.location)) {
                 when (mine.config.TELEPORT_ON_RESET) {
                     0 -> {
-                        event.player.teleport(
-                            mine.cuboid.world.getHighestBlockAt(event.player.location).location.add(0.0, 1.0, 0.0)
-                        )
+                        mine.teleportToSurface(event.player)
                     }
 
                     1 -> {

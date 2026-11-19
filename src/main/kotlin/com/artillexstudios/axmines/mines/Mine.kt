@@ -148,6 +148,27 @@ class Mine(val file: File, reset: Boolean = true) {
         }
     }
 
+    internal fun teleportToSurface(player: Player) {
+        val world = cuboid.world
+        val highest = world.getHighestBlockAt(player.location)
+        if (highest.type != Material.BARRIER) {
+            player.teleport(highest.location.add(0.0, 1.0, 0.0))
+            return
+        }
+
+        val x = highest.x
+        val z = highest.z
+        for (y in highest.y - 1 downTo world.minHeight) {
+            val floor = world.getBlockAt(x, y, z)
+            if (floor.type == Material.BARRIER || floor.type.isAir) continue
+            // A floor under the roof is only usable if the player fits above it.
+            if (!world.getBlockAt(x, y + 1, z).isPassable || !world.getBlockAt(x, y + 2, z).isPassable) continue
+
+            player.teleport(floor.location.add(0.5, 1.0, 0.5))
+            return
+        }
+    }
+
 
     fun reset(silent: Boolean = false) {
         tick = 0
@@ -239,9 +260,7 @@ class Mine(val file: File, reset: Boolean = true) {
                     0 -> {
                         cuboid.world.players.forEach {
                             if (cuboid.contains(it.location)) {
-                                it.teleport(
-                                    cuboid.world.getHighestBlockAt(it.location).location.add(0.0, 1.0, 0.0)
-                                )
+                                teleportToSurface(it)
                             }
                         }
                     }
