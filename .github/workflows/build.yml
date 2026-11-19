@@ -1,0 +1,21 @@
+name: Build AxMines
+on:
+  push:
+    branches: [build/barrier-fix]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: bash gradlew build --console=plain
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AxMines-barrier-fix
+          path: build/libs/*-all.jar
+          if-no-files-found: error
